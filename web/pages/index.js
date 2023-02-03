@@ -17,8 +17,9 @@ export default function Home() {
     const loading = document.getElementById("loading");
     axios({
       method: 'get',
-      url: 'https://rygb.tech:8333/api/ping',
+      url: 'https://rygb.tech:8333/ping',
     }).then((res) => {
+      console.log("Connected.");
       const anim = loading.animate({ opacity: "0" }, 500);
       anim.onfinish = () => {
         loading.style.opacity = "0";
