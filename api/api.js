@@ -39,5 +39,5 @@ const Orders = mongoose.model("Orders", {
 });
 
 app.get("/ping", (req, res) => {
-    res.send("Connected to API.");
+    res.status(200).send("Connected to API.");
 });

@@ -13,11 +13,17 @@ export default function Home() {
   }
 
   useEffect(() => {
+    console.log("ping RYGB")
     const loading = document.getElementById("loading");
     axios({
       method: 'get',
-      url: 'https://rygb.tech/api/ping',
-    })
+      url: 'https://rygb.tech:8333/api/ping',
+    }).then((res) => {
+      const anim = loading.animate({ opacity: "0" }, 500);
+      anim.onfinish = () => {
+        loading.style.opacity = "0";
+      }
+    });
   }, [router.isReady]);
 
   function fadeGrid() {
