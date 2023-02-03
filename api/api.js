@@ -2,11 +2,10 @@ const express = require("express");
 const app = express();
 const https = require("https");
 var fs = require("fs");
-var fs = require("fs");
 var privateKey = fs.readFileSync("rygb_cert/cloudflare/rygb.tech.pem", "utf8");
 var certificate = fs.readFileSync("rygb_cert/cloudflare/rygb.tech.crt", "utf8");
 var credentials = { key: privateKey, cert: certificate };
-
+const mongoose = require("mongoose");
 main().catch((err) => console.log(err));
 async function main() {
     await mongoose.connect("mongodb+srv://api:fatcat2023@cluster0.jibn21y.mongodb.net/?retryWrites=true&w=majority", function (err) {
