@@ -1,7 +1,7 @@
+const express = require("express");
 const app = express();
 const https = require("https");
 var fs = require("fs");
-const express = require("express");
 var fs = require("fs");
 var privateKey = fs.readFileSync("rygb_cert/cloudflare/rygb.tech.pem", "utf8");
 var certificate = fs.readFileSync("rygb_cert/cloudflare/rygb.tech.crt", "utf8");
