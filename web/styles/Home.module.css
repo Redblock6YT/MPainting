@@ -45,6 +45,35 @@
   font-family: 'Archivo Black', sans-serif;
 }
 
+.rbutton {
+  background-color: #ffff;
+  color: #474747;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 10px;
+  border-style: none;
+  display: grid;
+  width: 150px;
+  grid-template-columns: auto auto;
+  
+}
+
+.rbutton span {
+  display: inline-block;
+    /* float:left;  remove */
+    margin: 16px -31px 0 0;
+    padding: 5px 10px
+}
+
+.rbt {
+  font-size: 20px;
+  line-height: normal;
+  font-family: 'Open Sans', sans-serif;
+}
+
 .circle2 {
   display: block;
   position: absolute;
@@ -89,8 +118,9 @@
 
 .buttongrid {
   display:grid;
-  grid-template-columns: 33% 33% 33%;
+  grid-template-columns: 50% 50%;
   grid-gap:5px;
-  width:100%;
+  width:90%;
   height: 100%;
+  margin: auto;
 }

@@ -3,6 +3,7 @@ import styles from '@/styles/Home.module.css'
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import axios from 'axios';
+import anime from 'animejs';
 
 export default function Home() {
   const router = useRouter();
@@ -12,26 +13,100 @@ export default function Home() {
     }
   }
 
+  function checkCode() {
+    const code = document.getElementById("code").value;
+    console.log("check code")
+    if (code.length == 4) {
+      console.log("code length 4")
+      const codeelem = document.getElementById("code");
+      const stext = document.getElementById("navbar");
+      const elems = [codeelem, stext];
+      const loading = document.getElementById("loading");
+      anime({
+        targets: elems,
+        opacity: 0,
+      })
+      anime({
+        targets: loading,
+        opacity: 1,
+        duration: 200,
+        complete: () => {
+          axios({
+            method: 'get',
+            url: 'https://rygb.tech:8443/getAuthCode',
+          }).then((res) => {
+            if (code == res.data) {
+              const buttongrid = document.getElementById("buttongrid");
+              const loading = document.getElementById("loading");
+              stext.innerHTML = "Create a new Work Order"
+              const elems = [stext, buttongrid];
+              anime({
+                targets: elems,
+                opacity: 1,
+              })
+              anime({
+                targets: loading,
+                opacity: 0,
+              })
+            } else {
+              const stext = document.getElementById("navbar");
+              stext.innerHTML = "Incorrect code. Try again."
+              const codeelem = document.getElementById("code");
+              const elems = [codeelem, stext];
+              anime({
+                targets: elems,
+                opacity: 1,
+              })
+              const loading = document.getElementById("loading");
+              loading.style.opacity = "0";
+              anime({
+                targets: loading,
+                opacity: 0,
+              })
+            }
+          });
+        }
+      })
+
+    }
+  }
+
   useEffect(() => {
     console.log("ping RYGB")
     const loading = document.getElementById("loading");
     axios({
       method: 'get',
-      url: 'https://rygb.tech:8333/ping',
+      url: 'https://rygb.tech:8443/ping',
     }).then((res) => {
       console.log("Connected.");
       const anim = loading.animate({ opacity: "0" }, 500);
       anim.onfinish = () => {
         loading.style.opacity = "0";
       }
+      const stext = document.getElementById("navbar");
+      stext.innerHTML = "Enter authentication code"
+      const anim2 = stext.animate({ opacity: "1" }, 500);
+      anim2.onfinish = () => {
+        stext.style.opacity = "1";
+      }
+      const code = document.getElementById("code");
+      const anim3 = code.animate({ opacity: "1" }, 500);
+      anim3.onfinish = () => {
+        code.style.opacity = "1";
+      }
     });
   }, [router.isReady]);
 
   function fadeGrid() {
     const grid = document.getElementById("buttongrid");
-    const anim = grid.animate({ opacity: "0" }, 500);
+    const anim = grid.animate({ opacity: "0" }, 200);
     anim.onfinish = () => {
       grid.style.display = "none";
+      const stext = document.getElementById("navbar");
+      const anim2 = stext.animate({ opacity: "0" }, 200);
+      anim2.onfinish = () => {
+        stext.style.opacity = "0";
+      }
     }
   }
   return (
@@ -44,9 +119,13 @@ export default function Home() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet"></link>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Open+Sans&display=swap" rel="stylesheet"></link>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,0,0" />
       </Head>
       <div id="body" className={styles.body}>
-        <div id="navbar" className={styles.text}>Hang on</div>
+        <div id="navbar" style={{ opacity: "0" }} className={styles.text}>Hang on</div>
         <div id="buttongrid" style={{ opacity: "0" }} className={styles.buttongrid}>
           <button id="custom" onClick={() => select("custom")} className={styles.cbutton}>
             +
@@ -68,7 +147,13 @@ export default function Home() {
           </button>
         </div>
         <div id="loading" className={styles.circle2}></div>
-        <input id="code" className={styles.input} style={{opacity: "0"}} placeholder="Authentication Code" type="tel"></input>
+        <input id="code" onInput={() => checkCode()} className={styles.input} style={{ opacity: "0" }} placeholder="Authentication Code" type="tel"></input>
+        <div id="receipt">
+          <div id="r-content">
+            <div className={styles.rbutton}><span class="material-symbols-rounded">add_circle</span><p className={styles.rbt}>Add Item</p></div>
+          </div>
+          <h1 className={styles.text}>$0.00</h1>
+        </div>
       </div>
     </>
   )
